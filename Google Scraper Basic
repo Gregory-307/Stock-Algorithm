@@ -1,0 +1,33 @@
+# start = start date
+# end = end date
+# z = Search term - edited to be url friendly
+
+while len(urls) < 9 and (time.time() - cycle) < 30:
+    try:
+      driver.get('https://trends.google.com/trends/?geo=US')
+      time.sleep(1)
+      print("https://trends.google.com/trends/explore?date={}%20{}&geo=US&q={}".format(start, end, z))
+      driver.get("https://trends.google.com/trends/explore?date={}%20{}&geo=US&q={}".format(start, end, z))
+      time.sleep(3)
+      urls = ui.WebDriverWait(driver, 5).until(EC.presence_of_all_elements_located((By.TAG_NAME, "button")))
+      print("Page Loaded...")
+
+
+    except Exception as e:
+      if str(e) == 'Message: Timeout loading page after 30000ms':
+        time.sleep(100)
+      print("There was a problem loading the page:\n" + str(e))
+      Failed.append(y)
+      exceptions += 1
+
+  try:
+    if urls[9].get_attribute("class") == "widget-actions-item export":
+      print("Found it!")
+      urls[9].click()
+      Successes += 1
+  except Exception as e:
+    print("There was a problem pressing the button:\n" + str(e))
+    Failed.append(y)
+    exceptions += 1
+    
+# This can be used in many different codes. In the next code I will show you it within a TOR encrypted loop.
