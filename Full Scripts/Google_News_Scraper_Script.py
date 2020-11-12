@@ -1,7 +1,7 @@
 from newspaper import Article
 
 
-def scrap(Terms):
+def scraper_script(Terms):
 	z = term.replace(" ", "_")
 	print("\n#############\nNow scraping the 20 most common words of Google on: " + str(y) + "\n#############")
 	
@@ -37,7 +37,7 @@ def scrap(Terms):
 	return mc
 	
 
-def scrap(Related):
+def scrape_list(Related):
 	Google_words = []
 	print("Downloading Google Data for " + str(len(Related)) + " Words.")
 	for y in Related:
