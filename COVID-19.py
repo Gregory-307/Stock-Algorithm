@@ -37,8 +37,8 @@ from matplotlib import interactive
 
 home = r'C:\python'
 save = r'C:\python\Covid'
-profile_path=r"C:\Users\Grego\Desktop\Tor Browser\Browser\TorBrowser\Data\Browser\profile.default"
-TOR = r"C:\Users\Grego\Desktop\Tor Browser\Browser"
+profile_path=r"C:\Users\Grego\OneDrive\Desktop\Tor Browser\Browser\TorBrowser\Data\Browser\profile.default"
+TOR = r"C:\Users\Grego\Ondrive\Desktop\Tor Browser\Browser"
 # DataSets = r"C:\python\So far\Data Sets"
 # path = r'C:\Users\Grego\Downloads\F' + str(StockTerm)
 # path2 = r'C:\Users\Grego\Downloads\F' + str(StockTerm) + "2"
