@@ -12,14 +12,22 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.proxy import *
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+from selenium.webdriver.firefox.firefox_binary import FirefoxBinary
+from selenium.webdriver.firefox.options import Options
 from datetime import date
 import os
 
 class TS:
-	def __init__(self, homepath, path, profile_path):
+	def __init__(self, homepath, path, profile_path, Headless):
 		os.chdir(homepath)
+
+		binary = r'C:\Program Files\Mozilla Firefox\firefox.exe'
+		options = Options()
+		options.set_headless(headless=Headless)
+		options.binary = binary
 		cap = DesiredCapabilities().FIREFOX
-		cap["marionette"] = False
+		cap["marionette"] = True
+
 		profile = webdriver.FirefoxProfile(profile_path)
 		profile.set_preference("browser.download.manager.showWhenStarting",False)
 		profile.set_preference("browser.download.folderList",2)
@@ -29,7 +37,8 @@ class TS:
 		profile.set_preference("browser.helperApps.neverAsk.openFile", "text/csv")
 		profile.set_preference("browser.helperApps.neverAsk.saveToDisk","text/csv")
 		profile.update_preferences()
-		driver = webdriver.Firefox(firefox_profile=profile, capabilities=cap, executable_path=r"C:\python\geckodriver-v0.23.0-win64")
+
+		driver = webdriver.Firefox(firefox_profile=profile, options=options, capabilities=cap, executable_path=r"C:\python\geckodriver-v0.23.0-win64\geckodriver.exe")
 		driver.set_page_load_timeout(30)
 		self.home = homepath
 		self.profile_path = profile_path
@@ -46,6 +55,13 @@ class TS:
 		os.chdir(self.home)
 		exceptions = 0
 
+		binary = r'C:\Program Files\Mozilla Firefox\firefox.exe'
+		options = Options()
+		options.set_headless(headless=Headless)
+		options.binary = binary
+		cap = DesiredCapabilities().FIREFOX
+		cap["marionette"] = True
+
 		profile = webdriver.FirefoxProfile(profile_path)
 		profile.set_preference("browser.download.manager.showWhenStarting",False)
 		profile.set_preference("browser.download.folderList",2)
@@ -59,10 +75,9 @@ class TS:
 		profile.set_preference("network.proxy.socks_port", 9150)
 		profile.set_preference("network.proxy.socks_version", 5)
 		profile.update_preferences()
-		driver = webdriver.Firefox(firefox_profile=self.profile)
-		driver.set_page_load_timeout(30)
+		self.driver = webdriver.Firefox(firefox_profile=profile, options=options, capabilities=cap, executable_path=r"C:\python\geckodriver-v0.23.0-win64\geckodriver.exe")
+		self.driver.set_page_load_timeout(30)
 		self.profile = profile
-		self.driver = driver
 		
 
 		try:
@@ -92,6 +107,14 @@ class TS:
 		except:
 			pass
 		os.chdir(self.home)
+
+		binary = r'C:\Program Files\Mozilla Firefox\firefox.exe'
+		options = Options()
+		options.set_headless(headless=Headless)
+		options.binary = binary
+		cap = DesiredCapabilities().FIREFOX
+		cap["marionette"] = True
+
 		profile = webdriver.FirefoxProfile(profile_path)
 		profile.set_preference("browser.download.manager.showWhenStarting",False)
 		profile.set_preference("browser.download.folderList",2)
@@ -101,7 +124,7 @@ class TS:
 		profile.set_preference("browser.helperApps.neverAsk.openFile", "text/csv")
 		profile.set_preference("browser.helperApps.neverAsk.saveToDisk","text/csv")
 		self.profile = profile
-		self.driver = webdriver.Firefox(firefox_profile=profile)
+		self.driver = webdriver.Firefox(firefox_profile=profile, options=options, capabilities=cap, executable_path=r"C:\python\geckodriver-v0.23.0-win64\geckodriver.exe")
 		self.driver.set_page_load_timeout(30)
 		try:
 			self.driver.get('https://www.google.co.uk/')
@@ -119,13 +142,82 @@ class TS:
 			print(e)
 			pass
 
-	def Scrape(self, Terms, Reruns):
+	def FileCheck(self):
+		Failed2 = []
+		os.chdir(self.path)
+		z = os.listdir()
+		for o in z:
+			if "Time" not in str(o):
+				try:
+					df = pd.read_csv(o)
+					df.reset_index(inplace = True)
+					term = df.iloc[0,1]
+					term.replace(": (Worldwide)", "")
+					term = re.sub("[\(\[].*?[\)\]]", "", term)
+					Failed2.append(term)
+					os.remove(o)
+				except:
+					pass
+
+		return Failed2
+
+
+	def Refine(self):
+		os.chdir(self.path)
+		z = os.listdir()
+		for o in z:
+			try:
+				df = pd.read_csv(o)
+				df.reset_index(inplace = True)
+				term = re.sub("[\(\[].*?[\)\]]", "", term)
+				term = df.iloc[0,1]
+				lastdate = df.iloc[-1,0]
+				lastdate = lastdate.replace('-', '')
+				lastdate1 = lastdate[0:4]
+				lastdate2 = str(lastdate[4:5].replace('0', '')) + str(lastdate[5:6])
+				lastdate3 = str(lastdate[6:7].replace('0', '')) + str(lastdate[7:8])
+				lastdate = datetime.date(int(lastdate1), int(lastdate2), int(lastdate3))
+				days25 = today - datetime.timedelta(days = 90)
+				if lastdate < days25:
+					os.remove(o)
+				else:
+					pass
+			except:
+				pass
+
+	def Scrape(self, Terms, Reruns, Start = '', End = ''):
 		
 		print("\nDownloading as many as I can of the " + str(len(Terms)) + " Terms")
 		ETC = datetime.datetime.now() + datetime.timedelta(seconds=(len(Terms) * 10.4))  
 		print("To Download this much data estimated time of completion is " + str(ETC) + "\n")
 
+		if '-' in Start and 'days' in Start:
+			Start = Start.replace('-', '').replace('days', '')
+			Start = (date.today() - datetime.timedelta(int(Start)))
+		elif Start == '':
+			Start = (date.today() - datetime.timedelta(269))
+		else:
+			Start = Start.replace('-', '')
+			Start1 = Start[0:4]
+			Start2 = str(Start[4:5].replace('0', '')) + str(Start[5:6])
+			Start3 = str(Start[6:7].replace('0', '')) + str(Start[7:8])
+			Start = datetime.date(int(Start1), int(Start2), int(Start3))
+
+
+		if '-' in End and 'days' in End:
+			End = End.replace('-', '').replace('days', '')
+			End = (date.today() - datetime.timedelta(int(End)))
+		elif End == '':
+			End = date.today()
+		else:
+			End = End.replace('-', '')
+			End1 = End[0:4]
+			End2 = str(End[4:5].replace('0', '')) + str(End[5:6])
+			End3 = str(End[6:7].replace('0', '')) + str(End[7:8])
+			End = datetime.date(int(End1), int(End2), int(End3))
+
 		exceptions = 0
+		Successes = 0
 		one = 0
 		Pauses = 0
 		Tor = False
@@ -138,7 +230,7 @@ class TS:
 				y = ' '.join(y)
 
 			print("\n")
-			print(str(y) + ": " + str(one) + " out of " + str(lenterms))
+			print(str(y) + ": " + str(one) + " out of " + str(len(Terms)))
 			
 			print("################################\n__Downloading the Trends Data of: " + str(y)+ "\n################################")
 			
@@ -153,10 +245,10 @@ class TS:
 				try:
 					self.driver.get('https://trends.google.com/trends/?geo=US')
 					time.sleep(1)
-					print("https://trends.google.com/trends/explore?date={}%20{}&geo=US&q={}".format(start, end, z))
-					self.driver.get("https://trends.google.com/trends/explore?date={}%20{}&geo=US&q={}".format(start, end, z))
+					print("https://trends.google.com/trends/explore?date={}%20{}&geo=US&q={}".format(Start, End, z))
+					self.driver.get("https://trends.google.com/trends/explore?date={}%20{}&geo=US&q={}".format(Start, End, z))
 					time.sleep(3)
-					urls = ui.WebDriverWait(self.driver, 5).until(EC.presence_of_all_elemenself_located((By.TAG_NAME, "button")))
+					urls = ui.WebDriverWait(self.driver, 5).until(EC.presence_of_all_elements_located((By.TAG_NAME, "button")))
 					print("Page Loaded...")
 					
 					
@@ -207,59 +299,16 @@ class TS:
 					f.write(str(termsandf))
 					print(str(termsandf))
 
-		if Reruns > 0:
-			Failed = Failed + FileCheck()
-			Scrape(Failed, Reruns-1)
+		if Reruns > 1:
+			Failed = Failed + self.FileCheck()
+			self.Scrape(Failed, Reruns-1)
 		else:
 			print("\nDownload Complete")
 			self.driver.quit()
-			Refine()
+			self.Refine()
 			termsandf = (list(set(Terms + Failed)))
 			with open("Download.txt", "w", encoding="utf-8") as f:
 				f.write(str(termsandf))
 			print("Download Has Ended. These are the terms that were not downloaded:\n" + str(termsandf))
 
-	def FileCheck(self):
-		Failed2 = []
-		os.chdir(self.path)
-		for o in z:
-			if "Time" not in str(o):
-				try:
-					df = pd.read_csv(o)
-					df.reset_index(inplace = True)
-					term = df.iloc[0,1]
-					term.replace(": (Worldwide)", "")
-					term = re.sub("[\(\[].*?[\)\]]", "", term)
-					Failed2.append(term)
-					os.remove(o)
-				except:
-					pass
-
-		return Failed2
-
-
-	def Refine(self):
-		os.chdir(self.path)
-		z = os.listdir()
-		for o in z:
-			try:
-				df = pd.read_csv(o)
-				df.reset_index(inplace = True)
-				term = re.sub("[\(\[].*?[\)\]]", "", term)
-				term = df.iloc[0,1]
-				lastdate = df.iloc[-1,0]
-				lastdate = lastdate.replace('-', '')
-				lastdate1 = lastdate[0:4]
-				lastdate2 = str(lastdate[4:5].replace('0', '')) + str(lastdate[5:6])
-				lastdate3 = str(lastdate[6:7].replace('0', '')) + str(lastdate[7:8])
-				lastdate = datetime.date(int(lastdate1), int(lastdate2), int(lastdate3))
-				days25 = today - datetime.timedelta(days = 90)
-				if lastdate < days25:
-					os.remove(o)
-				else:
-					pass
-			except:
-				pass
-
-List1 = TS(r"C:\python", r"C:\Users\Grego\Downloads\TEST", r"C:\Users\Grego\Onedrive\Desktop\Tor Browser\Browser\TorBrowser\Data\Browser\profile.default")
-List1.Scrape(["cat"],1)
+	

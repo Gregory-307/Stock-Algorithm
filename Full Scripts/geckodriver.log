@@ -401,3 +401,39 @@ getNewSideloads@XPIProvider.jsm:2991:28
 
 ###!!! [Child][MessageChannel::SendAndWait] Error: Channel error: cannot send/recv
 
+1605325110628	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "-marionette" "-headless" "-foreground" "-no-remote" "-profile" "C:\\Users\\gregb\\AppData\\Local\\Temp\\rust_mozprofile.jmOpaZlLBRWG"
+*** You are running in headless mode.
+JavaScript error: resource://gre/modules/XULStore.jsm, line 66: Error: Can't find profile directory.
+1605325111653	Marionette	INFO	Listening on port 60587
+1605325112157	Marionette	WARN	TLS certificate errors will be ignored for this session
+1605325113756	Marionette	INFO	Stopped listening on port 60587
+JavaScript error: /_/mss/boq-identity/_/js/k=boq-identity.ConsentUi.en_GB._JWvUERh4Rs.es5.O/am=Ew/d=1/excm=_b,_tp,displayintroui/ed=1/dg=0/wt=2/ct=zgms/rs=AOaEmlHCScgjJSFeQEV69tcyVBbTHIg4rw/m=_b,_tp, line 473: NS_ERROR_NOT_INITIALIZED: 
+JavaScript error: resource://gre/modules/Sqlite.jsm, line 1031: Error: Sqlite.jsm has been shutdown. Cannot open connection to: C:\Users\gregb\AppData\Local\Temp\rust_mozprofile.jmOpaZlLBRWG\protections.sqlite
+[Parent 36024, Gecko_IOThread] WARNING: file /builds/worker/checkouts/gecko/ipc/chromium/src/base/process_util_win.cc, line 166
+1605325139604	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "-marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\gregb\\AppData\\Local\\Temp\\rust_mozprofile.SHZD1Ilp8ouQ"
+Can't find symbol 'eglSwapBuffersWithDamageEXT'.
+JavaScript error: resource://gre/modules/XULStore.jsm, line 66: Error: Can't find profile directory.
+1605325141135	Marionette	INFO	Listening on port 60654
+1605325141619	Marionette	WARN	TLS certificate errors will be ignored for this session
+1605325143362	Marionette	INFO	Stopped listening on port 60654
+JavaScript error: /_/mss/boq-identity/_/js/k=boq-identity.ConsentUi.en_GB._JWvUERh4Rs.es5.O/am=Ew/d=1/excm=_b,_tp,displayintroui/ed=1/dg=0/wt=2/ct=zgms/rs=AOaEmlHCScgjJSFeQEV69tcyVBbTHIg4rw/m=_b,_tp, line 473: NS_ERROR_NOT_INITIALIZED: 
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][MessageChannel::SendAndWait] Error: Channel error: cannot send/recv
+
+1605325258563	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "-marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\gregb\\AppData\\Local\\Temp\\rust_mozprofile.FeJN24PWVvGI"
+Can't find symbol 'eglSwapBuffersWithDamageEXT'.
+JavaScript error: resource://gre/modules/XULStore.jsm, line 66: Error: Can't find profile directory.
+1605325260171	Marionette	INFO	Listening on port 60753
+1605325260578	Marionette	WARN	TLS certificate errors will be ignored for this session
+1605325262209	Marionette	INFO	Stopped listening on port 60753
+JavaScript error: /_/mss/boq-identity/_/js/k=boq-identity.ConsentUi.en_GB._JWvUERh4Rs.es5.O/am=Ew/d=1/excm=_b,_tp,displayintroui/ed=1/dg=0/wt=2/ct=zgms/rs=AOaEmlHCScgjJSFeQEV69tcyVBbTHIg4rw/m=_b,_tp, line 473: NS_ERROR_NOT_INITIALIZED: 
+JavaScript error: resource://gre/modules/AsyncShutdown.jsm, line 697: Error: Phase "Sqlite.jsm: wait until all connections are closed" is finished, it is too late to register completion condition "protections.sqlite#0: waiting for shutdown"
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][MessageChannel::SendAndWait] Error: Channel error: cannot send/recv
+
