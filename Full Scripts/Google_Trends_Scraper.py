@@ -273,7 +273,9 @@ class TS:
 				Terms.remove(y)
 			except:
 				pass
-
+"""
+Optional:
+"""
 			if exceptions >= 10:
 				Successes = 0
 				Pauses += 1
@@ -299,6 +301,10 @@ class TS:
 					f.write(str(termsandf))
 					print(str(termsandf))
 
+"""
+Neccessary:
+"""
+
 		if Reruns > 1:
 			Failed = Failed + self.FileCheck()
 			self.Scrape(Failed, Reruns-1)
@@ -312,3 +318,11 @@ class TS:
 			print("Download Has Ended. These are the terms that were not downloaded:\n" + str(termsandf))
 
 	
+
+TESTFILE = TS(r"C:\python", r"C:\Users\gregb\Downloads\TEST", r"C:\Users\gregb\Onedrive\Desktop\Tor Browser\Browser\TorBrowser\Data\Browser\profile.default", False)
+TESTFILE.Scrape(["cat"],2)
+
+
+
+
+
