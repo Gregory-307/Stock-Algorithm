@@ -321,6 +321,7 @@ Neccessary:
 
 TESTFILE = TS(r"C:\python", r"C:\Users\gregb\Downloads\TEST", r"C:\Users\gregb\Onedrive\Desktop\Tor Browser\Browser\TorBrowser\Data\Browser\profile.default", False)
 TESTFILE.Scrape(["cat"],2)
+TESTFILE.Start_Tor()
 
 
 
